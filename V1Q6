@@ -1,9 +1,9 @@
-package viva6;
-
+package v1q6;
+        
 import java.util.Scanner;
 import java.util.Random;
 
-public class Viva6 {
+public class V1Q6 {
     public static void main(String[] args) {
         
         //Declare variables
@@ -58,7 +58,7 @@ public class Viva6 {
             }
                 
             //Right guess
-            if(guess != cursed1 || guess != cursed2){
+            if(guess != cursed1 && guess != cursed2){
                 if(guess == egg1 || guess == egg2 || guess == egg3){
                     System.out.println("You found a dragon egg!");
                     attempt--;
@@ -138,7 +138,7 @@ public class Viva6 {
         }
         return egg3;
         
-        /*
+        /*Example:
           guess = 5
           egg1 = 2  , distance = 3
           egg2 = 7  , distance = 2  (smallest distance)
