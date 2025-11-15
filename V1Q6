@@ -7,10 +7,9 @@ public class V1Q6 {
     public static void main(String[] args) {
         
         //Declare variables
-        int guess;
+        int guess, cursed1, cursed2;
         int dragonEggs = 3;
         int attempt = 10; //0-9 (10 attempts)
-        int cursed1, cursed2;
         int egg1, egg2, egg3;
         
         Scanner input = new Scanner(System.in);
