@@ -8,7 +8,6 @@ public class V1Q6 {
         
         //Declare variables
         int guess;
-        int totalChest;
         int dragonEggs = 3;
         int attempt = 10; //0-9 (10 attempts)
         int cursed1, cursed2;
