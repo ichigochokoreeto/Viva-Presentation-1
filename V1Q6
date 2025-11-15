@@ -7,9 +7,10 @@ public class V1Q6 {
     public static void main(String[] args) {
         
         //Declare variables
-        int guess, cursed1, cursed2;
+        int guess;
         int dragonEggs = 3;
         int attempt = 10; //0-9 (10 attempts)
+        int cursed1, cursed2;
         int egg1, egg2, egg3;
         
         Scanner input = new Scanner(System.in);
@@ -80,7 +81,7 @@ public class V1Q6 {
             //Check nearby chest
             int nearest = nearestEgg(guess, egg1, egg2, egg3); //To know which chest that contains dragon egg is the nearest
             
-            if((nearest-guess)<=3 || (guess-nearest)<=3){
+            if(Math.abs(nearest-guess)<=3){
                 System.out.println("Warm! You’re very close to a dragon egg!");
             }
             else{
