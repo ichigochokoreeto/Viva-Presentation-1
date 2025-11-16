@@ -1,0 +1,110 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package question2;
+import java.util.Scanner;
+/**
+ *
+ * @author 24001
+ */
+public class QUESTION2 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+       double price = 0.0;
+       double subtotal = 0.0;
+       double studentDiscount = 0.0;
+       double happyHour = 0.0;
+       double hour =0.0 ;
+       double comboDiscount = 0.0;
+       double payable = 0.0;
+       double loyalty = 0.0;
+       String day , member;
+       
+        Scanner scan = new Scanner(System.in);
+       
+       do{
+            System.out.print("Enter item price (0 to finish): ");
+       price = scan.nextDouble();
+       
+           if(price < 0){
+           System.out.println("Invalid amount. Price cannot be negative . Please re-enter.");
+           }
+           else{
+           subtotal += price;
+           }
+       } while(price != 0);
+       
+       System.out.print("Enter day of week: ");
+       day = scan.next();
+       System.out.print("Enter hour(24-hour format):");
+       hour = scan.nextDouble();
+       if(hour<0 || hour > 23){
+                System.out.print("Invalid hour. Please enter within (0-23): ");
+                hour = scan.nextDouble();
+       }
+       System.out.print("Is customer a member (Y/N)? ");
+       member = scan.next();
+       
+       System.out.println("------------ Kopi-Satu Receipt -------------");
+       
+        System.out.printf("The total price for your item is :RM%.2f ", subtotal);
+       double serviceTax ;
+       if(subtotal <= 30.00){
+           serviceTax = subtotal * 0.06;
+            System.out.printf("\n%-33s RM%.2f\n"," Service Tax (6%): " , serviceTax);
+       }else if(subtotal <= 100.00){
+           serviceTax = subtotal * 0.08;
+           System.out.printf("\n%-33s RM%.2f\n","Service Tax (8%): ", serviceTax);
+       }else{
+           serviceTax = subtotal * 0.10;
+           System.out.printf("\n%-33s RM%.2f\n"," Service Tax (10%): ",serviceTax);
+       }
+       
+       double totalBeforeDiscount = subtotal + serviceTax;
+       System.out.printf("%-33s RM%.2f\n","Total before discount : ", totalBeforeDiscount);
+       switch (day){
+           case "Monday":
+           case "Tuesday":
+           case "Wednesday":
+           case "Thursday":
+           case "Friday":    
+               if(totalBeforeDiscount > 25){
+                studentDiscount = totalBeforeDiscount * 0.10;
+                System.out.printf("%-33s RM%.2f\n","Student Discount (10%) : ", studentDiscount);
+               }
+               if(hour >= 15.00 && hour < 17.00){
+                   happyHour = totalBeforeDiscount * 0.05;
+                   System.out.printf("%-33s RM%.2f\n","Happy Hour Discount (5%) : ", happyHour);
+               }else{
+                   happyHour = 0.0;
+               }
+                payable = totalBeforeDiscount - (studentDiscount + happyHour); 
+                break;
+            case "Saturday":
+            case "Sunday":     
+               if(subtotal >= 50.00){
+                comboDiscount = totalBeforeDiscount * 0.05;
+                System.out.printf("%-33s RM%.2f\n","Weekend Combo Discount (5%) : ", comboDiscount);
+               }
+                payable = totalBeforeDiscount - comboDiscount;
+                break;
+            default: 
+                System.out.print("Invalid day. Please enter a day within (Monday - Sunday)");
+                break;
+       }
+       System.out.println("---------------------------------------------");
+       System.out.printf("%-33s RM%.2f\n","Total Payable : ", payable);
+       if(member.equals("Y")){
+           loyalty = payable * 0.02;
+           System.out.printf("%-33s RM%.2f\n","Loyalty Cashback (2%) : ", loyalty);
+       }else {
+           loyalty = 0.0;
+       }
+       System.out.println("---------------------------------------------");
+       System.out.printf("%-33s RM%.2f\n","Final Amount to Collect : ", payable);
+    }
+}
