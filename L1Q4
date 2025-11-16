@@ -1,0 +1,74 @@
+package viva1.q4;
+import java.util.Scanner;
+public class Viva1Q4 {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        
+        // Extract Year, Month, Day
+        String ic , yy, mm , dd ;
+        System.out.println("Enter IC number (YYMMDD-##-####): ");
+        ic = input.nextLine();
+        yy = ic.substring(0,2);
+        mm = ic.substring(2,4);
+        dd = ic.substring(4,6);
+        int year = Integer.parseInt(yy);
+        int month = Integer.parseInt(mm);
+        int day = Integer.parseInt(dd);
+        year += (year <=25)? 2000 : 1900; // Convert year to 4 digits
+        System.out.println("Birth Date: " + day + "/" + month + "/"  + year);
+        
+        // Gender from last digit
+        char lastDigitChar = ic.charAt(ic.length()-1);
+        int lastDigit = Character.getNumericValue(lastDigitChar);
+        String gender = (lastDigit%2 ==0)? "Female":"Male";
+           System.out.println("Gender: " + gender);
+      
+           // Sum of digit
+           int sum = 0;
+           for (int i=0; i< ic.length(); i++){
+               char num = ic.charAt(i);
+               if (Character.isDigit(num)){
+                int digit = Character.getNumericValue(num);
+                sum += digit;
+               }
+           }
+              System.out.println("Sum of Digits: "+ sum);
+              
+              // Determine long month and short month
+              boolean longMonth = getMonthType (month);
+              boolean shortMonth = !getMonthType(month);
+           
+              // Lucky winner requirement
+              String lucky;
+              if (gender.equals("Male")){
+                  if (sum % 5 == 0 && shortMonth){
+                      lucky = "Yes";
+                  }else{      
+                        lucky = "No";
+                        }
+                  }else{ // Female
+                      if(sum % 7 == 0 && longMonth){
+                          lucky = "Yes";
+                      }else{
+                                  lucky = "No";
+                            }  
+                  }
+           System.out.println("Lucky Winner : "+ lucky);
+    }
+           public static boolean getMonthType (int month){
+             
+                switch (month){
+                    case 1: 
+                    case 3: 
+                    case 5: 
+                    case 7: 
+                    case 8: 
+                    case 10: 
+                    case 12:
+                        return true;
+                                
+                    default : 
+                        return false;
+                }
+           }
+        }
