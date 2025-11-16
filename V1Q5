@@ -1,0 +1,57 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package question5;
+import java.util.Scanner;
+/**
+ *
+ * @author 24001
+ */
+public class QUESTION5 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Enter Original Message: ");
+        String originalMessage = scan.nextLine();
+        
+        System.out.println("Encoded Message: ");
+        
+        for(int i = 0; i < originalMessage.length() ; i++){
+            char character = originalMessage.charAt(i);
+            int asciiDecimal = (int) character;
+            String binary8Bit = String.format("%8s", Integer.toBinaryString(asciiDecimal)).replace(' ','0');
+            
+            String invertedBinary = "";
+            for(char bit : binary8Bit.toCharArray()){
+                if(bit== '0'){
+                    invertedBinary += '1';
+                }else{
+                    invertedBinary += '0';
+                }
+            }
+            
+            int encodedDecimal = 0;
+            int powerOfTwo = 1;
+            
+            for(int j = invertedBinary.length() - 1; j>=0 ; j--){
+                if(invertedBinary.charAt(j) == '1'){
+                    encodedDecimal += powerOfTwo;
+                }
+                powerOfTwo *= 2;
+                }
+            System.out.print(encodedDecimal);
+            if(i<originalMessage.length() - 1){
+                System.out.print(" ");
+            }
+        }
+        System.out.println();
+        
+    }
+    
+        
+    }
+    
