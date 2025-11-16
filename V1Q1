@@ -1,0 +1,93 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package viva1;
+
+/**
+ *
+ * @author Nur Hasna Nadirah
+ */
+import java.util.Scanner;
+public class Viva1 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter number of test cases: ");
+        int testCase = scanner.nextInt();
+        
+        for (int i = 1; i <= testCase; i++){
+        System.out.println("\n--- Test Case " + i + " ---");
+        
+        System.out.print("Enter number of overdue days: ");
+        int daysOverdue = scanner.nextInt();
+        System.out.print("Enter book type (R/G/M/C/T): ");
+        char bookType = scanner.next().charAt(0);
+        System.out.print("Enter borrower type (T/S): ");
+        char borrowerType = scanner.next().charAt(0);
+        System.out.print("Enter number of previous late returns: ");
+        int lateReturns = scanner.nextInt();
+        
+        double baseFine = 0.0;
+        double finalFine = 0.0;
+        
+        switch (bookType) {
+            case 'R' -> baseFine = 100.00;
+            case 'G' -> {
+                if (daysOverdue > 0) {
+                    int tier1Days = Math.min(daysOverdue, 7);
+                    baseFine += tier1Days * 0.50;
+                if (daysOverdue > 7) {
+                    int tier2Days = Math.min(daysOverdue - 7, 23); 
+                    baseFine += tier2Days * 1.00;
+                }
+                if (daysOverdue > 30) {
+                    int tier3Days = daysOverdue - 30;
+                    baseFine += tier3Days * 2.00;
+                }
+              }
+            }
+            case 'M' -> baseFine = daysOverdue * 0.20;
+            case 'C' -> {
+                if (daysOverdue > 10) {
+                    baseFine = (daysOverdue - 10) * 5.00;
+                    baseFine += 10 * 2.00;
+                } else {
+                    baseFine = daysOverdue * 2.00;
+                }
+            }
+            case 'T' -> {
+               baseFine = daysOverdue * 10.00;
+               if (daysOverdue > 15) {
+                     baseFine += 200.00;
+                }
+            }
+        }
+        finalFine = baseFine;
+        
+        if (daysOverdue > 60) {
+            finalFine += 25.00;
+        }
+        
+        if (lateReturns >= 3) {
+            finalFine += 10.00;
+        }
+        
+        boolean discountApplied = false;
+        if (borrowerType == 'T') {
+            finalFine *= (1.00 - 0.20);
+            discountApplied = true;
+        }
+        
+        if (!discountApplied && lateReturns == 0 && daysOverdue <= 3) {
+            finalFine *= (1.00 - 0.50);
+        }
+        
+        System.out.printf("Total fine: %.2f\n", finalFine);
+    }
+  }
+}
