@@ -5,16 +5,14 @@ import java.util.Random;
 
 public class V1Q6 {
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        Random rand = new Random();
         
         //Declare variables
         int guess;
-        int dragonEggs = 3;
+        int dragonEggs = 0;
         int attempt = 10; //0-9 (10 attempts)
-        int cursed1, cursed2;
-        int egg1, egg2, egg3;
-        
-        Scanner input = new Scanner(System.in);
-        Random rand = new Random();
+        int egg1, egg2, egg3, cursed1, cursed2;
         
         //Get 3 random dragon eggs 
         egg1 = rand.nextInt(10) + 1; //Add 1 to start from 1, not 0
@@ -34,76 +32,71 @@ public class V1Q6 {
         //Chests and Eggs
         System.out.println("Welcome to the Dragon Egg Quest!");
         System.out.println("There are 10 chests, 3 dragon eggs, and 2 cursed chests.");
-        System.out.println("You have 10 attempts to find all dragon eggs.");
-        System.out.println();
+        System.out.println("You have 10 attempts to find all dragon eggs.\n");
         
         //Player guesses
-        while(attempt>0 && dragonEggs>0){
-            //System.out.println();
+        while(attempt>0 && dragonEggs<3){
             System.out.print("Guess a chest (1-10): ");
             guess = input.nextInt();
             
             //Cursed chests
             if(guess == cursed1 || guess == cursed2){
                 System.out.println("The chest is cursed! Beware!");
-                attempt-=2;
-                if(guess == egg1 || guess == egg2 || guess == egg3){
-                    System.out.println("You found a dragon egg!");
-                    System.out.println("Attempts left: " + attempt);
-                    dragonEggs--; 
-                    System.out.println();
-                    continue;
-                }    
+                attempt-=2; //Cursed chest reduce 2 attempts
+            }
+            else{
+                attempt--; //Other chests reduce 1 attempt   
             }
                 
-            //Right guess
-            if(guess != cursed1 && guess != cursed2){
-                if(guess == egg1 || guess == egg2 || guess == egg3){
-                    System.out.println("You found a dragon egg!");
-                    attempt--;
-                    System.out.println("Attempts left: " + attempt);
-                    dragonEggs--; 
-                    System.out.println();
+            //Correct guess
+            if(guess == egg1 || guess == egg2 || guess == egg3){
+                System.out.println("You found a dragon egg!");
+                dragonEggs++; 
                
-                    //Remove the egg so player won't find the same egg twice
-                    if (guess == egg1){
-                        egg1 = -1;
-                    }
-                    if (guess == egg2){
-                        egg2 = -1;
-                    }
-                    if (guess == egg3){ 
-                        egg3 = -1;
-                    }
-                continue; //Repeat loop
+                //Remove the egg so player won't find the same egg twice
+                if (guess == egg1)
+                    egg1 = 0;
+                if (guess == egg2)
+                    egg2 = 0;
+                if (guess == egg3)
+                    egg3 = 0;
             }
-        }
-            //Check nearby chest
-            int nearest = nearestEgg(guess, egg1, egg2, egg3); //To know which chest that contains dragon egg is the nearest
-            
-            if(Math.abs(nearest-guess)<=3){
+            else{//Compare to find minDistance and nearestEgg
+                int nearestEgg = 0; //To know which chest that contains dragon egg is the nearest
+                int minDistance = 999; //or Integer.MAX_VALUE
+                
+                if (egg1!=0 && (Math.abs(guess-egg1)<minDistance)){
+                    minDistance = Math.abs(guess-egg1);
+                    nearestEgg = egg1;
+                }
+                if (egg2!=0 && (Math.abs(guess-egg2)<minDistance)){
+                    minDistance = Math.abs(guess-egg2);
+                    nearestEgg = egg2;
+                }
+                if (egg3!=0 && (Math.abs(guess-egg3)<minDistance)){
+                    minDistance = Math.abs(guess-egg3);
+                    nearestEgg = egg3;
+                }
+                //Check nearby chest
+                if(minDistance<=3){
                 System.out.println("Warm! You’re very close to a dragon egg!");
-            }
-            else{
-                System.out.println("Cold! You’re far from any dragon egg!");
-            }
-            
-            if(guess > nearest){
-                System.out.println("Hint: Try a lower chest number");
-            }
-            else{
-                System.out.println("Hint: Try a higher chest number");
-            }
-            
-            System.out.println("No egg here, keep searching!");
-            attempt--;
-            System.out.println("Attempts left: " + attempt);
-            
-            System.out.println();
+                }
+                else{
+                    System.out.println("Cold! You’re far from any dragon egg!");
+                }
+                
+                if(guess > nearestEgg){
+                    System.out.println("Hint: Try a lower chest number");
+                }
+                else{
+                    System.out.println("Hint: Try a higher chest number");
+                }
+                    System.out.println("No egg here, keep searching!");
+            }    
+                    System.out.println("Attempts left: " + attempt + "\n");
         }
-            
-            //End conditions
-            if(dragonEggs == 0){
+        //End conditions
+            if(dragonEggs == 3){
                 System.out.print("Congratulations! All dragon eggs are safe!");
             }
             else{
@@ -111,38 +104,4 @@ public class V1Q6 {
             }
             input.close();
         }
-    
-        //Function to find the nearest egg
-        private static int nearestEgg(int guess, int egg1, int egg2, int egg3){ //"private" only usable in this class
-        int nearest = 999; //Start with big number to find the smallest distance between player's guess and the dragon eggs
-
-        if(egg1 != -1){ //If egg1 still exists
-            //Update nearest distance if this egg is closer
-            //Math.min(nearest, distance between guess and egg1)
-            nearest = Math.min(nearest, Math.abs(guess - egg1)); 
-        }                              
-        if(egg2 != -1){
-            nearest = Math.min(nearest, Math.abs(guess - egg2));
-        }
-        if(egg3 != -1){
-            nearest = Math.min(nearest, Math.abs(guess - egg3));
-        }
-
-        //Return the nearest egg’s actual number
-        if(nearest == Math.abs(guess - egg1)){
-            return egg1;
-        }
-        if(nearest == Math.abs(guess - egg2)){
-            return egg2;
-        }
-        return egg3;
-        
-        /*Example:
-          guess = 5
-          egg1 = 2  , distance = 3
-          egg2 = 7  , distance = 2  (smallest distance)
-          egg3 = 10 , distance = 5 
-          so, return (print) egg2=7 as the nearest egg chest
-        */
-    }
 }
