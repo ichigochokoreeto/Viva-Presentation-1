@@ -1,0 +1,98 @@
+package v2q5;
+
+import java.util.Scanner;
+import java.util.Random;
+
+public class V2Q5 {
+    
+    public static int[] generateNum(int numOfBall, int length){
+        Random rand = new Random();
+        int[] arr = new int[numOfBall];
+
+        int max = (int) Math.pow(10, length) - 1;
+        int min = (int) Math.pow(10, length - 1);  
+
+        for(int i=0; i<numOfBall; i++) {
+            arr[i] = rand.nextInt(max-min+1) + min;
+        }
+        return arr;
+    }
+            
+    public static void displayNum(int[] num, int numOfBall){
+        int cols = (int) Math.ceil(Math.sqrt(numOfBall));
+        int rows = (int) Math.ceil((double) numOfBall/cols);
+        
+        int index = 0;
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<cols; j++){
+                if(index<numOfBall){
+                   System.out.print(num[index++] + "\t"); //Print num[0], num[1],...
+                }
+            }
+            System.out.println();
+        }
+    }
+    
+    public static boolean foundTarget(int target, int poolNumber){
+         return target == poolNumber;
+    }
+    
+    public static boolean nearMiss(int target, int poolNumber, int length){
+        String targetNum = String.valueOf(target);
+        String poolNum = String.valueOf(poolNumber);
+
+        int countSame = 0;
+        for (int i=0; i<length; i++){
+            if(targetNum.charAt(i) == poolNum.charAt(i))
+                countSame++;
+        }//near miss = exactly (length -1) digits correct
+        return countSame == length - 1;
+    }
+    
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        
+        System.out.print("Enter number length (3 or 4): ");
+        int length = input.nextInt();
+        System.out.print("Enter number of ball to choose: ");
+        int numOfBall = input.nextInt();
+        System.out.print("Enter ball value: ");
+        int ballValue = input.nextInt();
+        System.out.print("Target number: ");
+        int target = input.nextInt();
+        
+        int[] pool = generateNum(numOfBall, length);
+        displayNum(pool, numOfBall);
+        
+        boolean win = false;
+        boolean near = false;
+        int[] nearList = new int[numOfBall]; // array to store near misses
+        int nearCount = 0; // number of near misses
+
+        for(int x : pool){
+            if(foundTarget(target, x)){
+                win = true;
+            }else if(nearMiss(target, x, length)){
+                near = true;
+                nearList[nearCount++] = x; // store near miss
+            }
+        }
+        System.out.println();
+
+        if(win){
+            double totalPrize = (double)(length*ballValue*1000)/numOfBall;
+
+            System.out.println("Congratulations!! You Got The Number " + target);
+            System.out.printf("Total Prize: RM%.2f\n", totalPrize);
+        }
+        else if(near){
+            System.out.println("Near miss! These numbers were close:");
+            for (int n : nearList) System.out.print(n + " ");
+            System.out.println();
+        }
+        else{
+            System.out.println("Try again next time");
+        }
+        input.close();
+    }
+}
