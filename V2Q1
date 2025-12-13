@@ -1,0 +1,98 @@
+package v2q1;
+
+import java.util.Scanner;
+
+public class V2Q1 {
+    
+    public static boolean isAnagram(String a, String b){ //Anagram: listen -> silent
+        a = a.toLowerCase(); //tukar huruf kecil
+        b = b.toLowerCase(); //tukar huruf kecil
+        
+        if(a.length() != b.length()){ return false;} //check length perkataan, kalau tak sama. confirm bukan anagram
+
+        int[] count = new int[26]; //26 huruf (a-z)
+        for (int i=0; i<a.length(); i++){
+            count[a.charAt(i) - 'a']++; //Huruf dari a -> tambah
+            count[b.charAt(i) - 'a']--; //Huruf dari b -> tolak
+        } //if anagram, total count is 0 
+
+        for (int c : count){ //check baki
+            if (c != 0){ //ada baki, bukan anagram
+                return false;
+            }
+        }
+        return true; //takde baki, it is anagram
+    }
+    
+    //Count characters in a word
+    public static int countChar(String str){
+        return str.length();
+    }
+    
+    //Remove duplicates and return new size
+    public static int removeDuplicates(String[] words, int n){
+        int size = 0;
+        for(int i = 0; i < n; i++){
+            boolean duplicate = false;
+            for(int j = 0; j < size; j++){
+                if(words[i].equalsIgnoreCase(words[j])){ //huruf besar/kecil sama je
+                    duplicate = true;
+                    break;
+                }
+            }
+            if(!duplicate) words[size++] = words[i]; //Kalau tak duplicate, accept perkataan tu 
+        }
+        return size;
+    }
+
+    public static void main(String[] args){
+        
+        Scanner input = new Scanner(System.in);
+        
+        System.out.print("Enter the number of words: ");
+        int n = input.nextInt();
+        input.nextLine(); //clear newline
+        
+        //Enter words
+        String[] words = new String[n];
+        for(int i=0; i<n; i++){
+            System.out.print("Enter a word: ");
+            words[i] = input.nextLine().trim(); //nextLine() baca satu sentence, trim() remove space kat depan & belakang
+        }
+        
+        //Remove duplicates
+        n = removeDuplicates(words, n);
+    
+        boolean[] grouped = new boolean[n]; // track grouped words
+        int groupNum = 1;
+
+        // Find anagram groups
+        for(int i = 0; i < n; i++){
+            if(!grouped[i]){ //kalau perkataan tu belum digunakan, cari anagram dia
+                String group = words[i];
+                boolean hasAnagram = false;
+                for (int j = i + 1; j < n; j++) {
+                    if (!grouped[j] && isAnagram(words[i], words[j])) {
+                        group += " " + words[j];
+                        grouped[j] = true;
+                        hasAnagram = true;
+                    }
+                }
+                if(hasAnagram){ //Print anagram
+                    System.out.println("Anagram group " + groupNum + ": " + group);
+                    grouped[i] = true;
+                    groupNum++;
+                }
+            }
+        }
+
+        //Print words without group
+        String noGroup = "";
+        for (int i = 0; i < n; i++){
+            if(!grouped[i]) noGroup += words[i] + " ";
+        }
+        if (!noGroup.isEmpty()){
+            System.out.println("Without anagram group: " + noGroup.trim()); //reim) remove extra space kat hujung
+        }
+    }        
+}
