@@ -4,25 +4,38 @@ import java.util.Scanner;
 
 public class V2Q1 {
     
-    public static boolean isAnagram(String a, String b){ //Anagram: listen -> silent
-        a = a.toLowerCase(); //tukar huruf kecil
-        b = b.toLowerCase(); //tukar huruf kecil
+    public static boolean isAnagram(String a, String b){
+        a = a.toLowerCase().trim();
+        b = b.toLowerCase().trim();
         
-        if(a.length() != b.length()){ return false;} //check length perkataan, kalau tak sama. confirm bukan anagram
-
+        //Tukar a & b jadi array char
         int[] count = new int[26]; //26 huruf (a-z)
-        for (int i=0; i<a.length(); i++){
-            count[a.charAt(i) - 'a']++; //Huruf dari a -> tambah
-            count[b.charAt(i) - 'a']--; //Huruf dari b -> tolak
-        } //if anagram, total count is 0 
-
-        for (int c : count){ //check baki
-            if (c != 0){ //ada baki, bukan anagram
-                return false;
-            }
+        
+        for(char c : a.toCharArray()){
+            if(c >= 'a' && c <= 'z') count[c - 'a']++; //Tambah count untuk setiap huruf kat a
+        } //Contoh: "banana" -> b=1, a=3, n=2
+        for(char c : b.toCharArray()){ //Tolak count untuk setiap huruf kat b
+            if(c >= 'a' && c <= 'z') count[c - 'a']--; //Contoh: "ban" -> b=-1, a=-1, n=-1
+        }//Baki count -> a=2, b=0, n=1
+        
+        //Check total balance
+        int nonZero = 0; //nonZero ialah jumlah baki semua huruf, kalau o, confirm anagram macam listen <-> silent
+        for(int c : count){
+            if(c != 0) nonZero += Math.abs(c);
         }
-        return true; //takde baki, it is anagram
+
+        //Kalau balance 0 atau lebih besar, tapi ada huruf yang sama, kita anggap ada match
+        //Untuk kes "banana" & "ban", semua huruf "b a n" ada di "banana" → return true
+        if(a.length() == b.length()) return nonZero == 0;
+
+        //Check subset untuk perkataan lebih pendek
+        boolean subset = true;
+        for(int i = 0; i < 26; i++){ 
+            if(count[i] < 0) subset = false; //Kalau perkataan b pendek, semua huruf dia ada dalam a
+        } //Kalau ada count[i]<0 -> b ada huruf lebih dari a, bukan subset, return false
+    return subset; //Kalau semua ok -> return true
     }
+
     
     //Count characters in a word
     public static int countChar(String str){
