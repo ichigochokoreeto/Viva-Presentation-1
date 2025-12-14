@@ -1,66 +1,72 @@
-//Viva 2 Question 5
-
-package v2q5;
+package v2q5i;
 
 import java.util.Scanner;
 import java.util.Random;
 
-public class V2Q5 {
+public class V2Q5i {
     
-    public static int[] generateNum(int numOfBall, int length){
+    public static int[] generateNum(int numOfBall, int length){ //Generate random number
         Random rand = new Random();
         int[] arr = new int[numOfBall];
-
-        int max = (int) Math.pow(10, length) - 1;
-        int min = (int) Math.pow(10, length - 1);  
-
-        for(int i=0; i<numOfBall; i++) {
-            arr[i] = rand.nextInt(max-min+1) + min;
+        
+        for(int i=0; i<numOfBall; i++){
+            if(length == 3){
+                arr[i] = rand.nextInt(1000); //0-999
+            }
+            else if(length == 4){
+                arr[i] = rand.nextInt(10000); //0-9999
+            }
         }
         return arr;
     }
             
-    public static void displayNum(int[] num, int numOfBall){
-        int cols = (int) Math.ceil(Math.sqrt(numOfBall));
-        int rows = (int) Math.ceil((double) numOfBall/cols);
+    public static void displayNum(int[] num, int numOfBall){ //Display rows and columns
+        //Cari bilangan rows and columns dulu before display
+        int cols = (int)Math.ceil(Math.sqrt(numOfBall)); //√⌈numOfBall⌉, contoh √7=2.64, ⌈2.64⌉=3
+        int rows = (int)Math.ceil((double)numOfBall/cols); //Contoh: cols=5, rows=⌈20/5⌉=4
         
-        int index = 0;
+        int position = 0;
         for(int i=0; i<rows; i++){
             for(int j=0; j<cols; j++){
-                if(index<numOfBall){
-                   System.out.print(num[index++] + "\t"); //Print num[0], num[1],...
+                if(position<numOfBall){
+                   System.out.print(num[position++] + "\t"); //Print num[0],num[1],...
                 }
             }
             System.out.println();
         }
     }
     
-    public static boolean foundTarget(int target, int poolNumber){
-         return target == poolNumber;
+    public static boolean foundTarget(int target, int poolNumber){ //Check kalau nombor yang diteka sama dengan jawapan
+         return target == poolNumber; //return true
     }
     
-    public static boolean nearMiss(int target, int poolNumber, int length){
-        String targetNum = String.valueOf(target);
-        String poolNum = String.valueOf(poolNumber);
+    public static boolean nearMiss(int target, int poolNumber, int length){ //Guess(target) hampir tepat kalau beza 1 digit je dengan jawapan
+        String targetNum = String.format("%0" + length + "d", target); //Convert nombor ke string untuk compare setiap digit one by one
+        String poolNum = String.format("%0" + length + "d", poolNumber);
 
-        int countSame = 0;
+        int sameDigit = 0;
         for (int i=0; i<length; i++){
             if(targetNum.charAt(i) == poolNum.charAt(i))
-                countSame++;
-        }//near miss = exactly (length -1) digits correct
-        return countSame == length - 1;
+                sameDigit++;
+        }
+        return sameDigit == length - 1; //length-1 maksudnya kalau bola 3 digit and ada 2 digit yang sama, guess jadi hampir tepat
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) { //Main program
         Scanner input = new Scanner(System.in);
         
-        System.out.print("Enter number length (3 or 4): ");
+        System.out.print("Enter number length (3 or 4): "); //Bola 3 digit ke 4 digit
         int length = input.nextInt();
-        System.out.print("Enter number of ball to choose: ");
+            if(length != 3 && length != 4){ //Selain 3 dan 4, bola tak wujud
+                System.out.println("Ball doesn't exist");
+                input.close();
+                return;
+            }
+        System.out.print("Enter number of ball to choose: "); //Nak berapa pilihan bola
         int numOfBall = input.nextInt();
-        System.out.print("Enter ball value: ");
+        System.out.print("Enter ball value: "); //Nak kira total prize nanti
         int ballValue = input.nextInt();
-        System.out.print("Target number: ");
+        System.out.print("Target number: "); //Nak teka nombor berapa
         int target = input.nextInt();
         
         int[] pool = generateNum(numOfBall, length);
@@ -68,22 +74,21 @@ public class V2Q5 {
         
         boolean win = false;
         boolean near = false;
-        int[] nearList = new int[numOfBall]; // array to store near misses
-        int nearCount = 0; // number of near misses
+        int[] nearList = new int[numOfBall]; //Array to store near misses
+        int nearCount = 0; //Bilangan near misses
 
-        for(int x : pool){
-            if(foundTarget(target, x)){
+        for(int i=0; i<pool.length; i++){
+            if(foundTarget(target, pool[i])){
                 win = true;
-            }else if(nearMiss(target, x, length)){
+            }else if(nearMiss(target, pool[i], length)){
                 near = true;
-                nearList[nearCount++] = x; // store near miss
+                nearList[nearCount++] = pool[i]; //Store near miss
             }
         }
         System.out.println();
 
         if(win){
             double totalPrize = (double)(length*ballValue*1000)/numOfBall;
-
             System.out.println("Congratulations!! You Got The Number " + target);
             System.out.printf("Total Prize: RM%.2f\n", totalPrize);
         }
