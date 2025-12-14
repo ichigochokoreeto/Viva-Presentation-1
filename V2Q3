@@ -1,0 +1,100 @@
+package v2q3;
+import java.util.Scanner;
+public class V2Q3 {
+    static String truncatedString(String str,int c, int d){
+        String truncated = "";
+        for(int left = c, right = d - 1 ;left<=right ; left++){
+            truncated = truncated + str.charAt(left);
+        }
+        return truncated;
+    }
+    static String getLongestPalindrome(String str){
+        String truncated = "", reverse = "", longestpalindrome = "";
+        for(int i = 0; i<str.length(); i++){
+            for(int j = str.length(); j>i; j--){
+                truncated = truncatedString(str,i,j);
+                for (int a = truncated.length() - 1; a>=0; a--){
+                    reverse = reverse + truncated.charAt(a);
+                }
+                if(truncated.toLowerCase().equals(reverse.toLowerCase()) && truncated.length()>=2){
+                    if(truncated.length() > longestpalindrome.length()){
+                        longestpalindrome = truncated;
+                    }
+                }
+                reverse = "";
+            }
+        }
+        if(longestpalindrome.equals("")){
+            longestpalindrome = "-";
+        }
+        return longestpalindrome;
+    }
+    static char[] mirror = new char[128];
+    static void mirrorpair(){
+        char[] pairs = {'A','H','I','M','O','T','U','V','W','X','Y','o','u','v','w'};
+        for(char same : pairs){
+            mirror[same] = same;
+        }
+        mirror['b'] = 'd';
+        mirror['d'] = 'b';
+        mirror['p'] = 'q';
+        mirror['q'] = 'p';
+    }
+    static boolean ismirrorable(String str){
+        int left = 0 , right = str.length() - 1;
+        while(left<=right){
+            char l = str.charAt(left);
+            char r = str.charAt(right);
+            if(mirror[l] != r){
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+    static String getLongestMirrorWord(String str){
+        String longestmirror = "", truncated = "";
+        for(int i = 0; i<str.length(); i++){
+            for(int j = str.length(); j>i; j--){
+                truncated = truncatedString(str,i,j);
+                if(truncated.length()>=2 && ismirrorable(truncated)){
+                    if(longestmirror.length() < truncated.length()){
+                        longestmirror = truncated;
+                    }
+                }
+            }
+        }
+        if(longestmirror.equals("")){
+            longestmirror = "-";
+        }
+        return longestmirror;
+    }
+    public static void main(String[] args) {
+        mirrorpair();
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter additional pairs:");
+        int i;
+            for(i = 1; i<=10; i++){
+                String input = s.nextLine();
+                if(input.equals("")){
+                    i--;
+                    break;
+                }
+                if(input.length()!=2){
+                    System.out.println("Invalid pair");
+                    i--;
+                    continue;
+                }
+                char a = input.charAt(0);
+                char b = input.charAt(1);
+                mirror[a] = b;
+                mirror[b] = a;
+            }
+            System.out.println(i + " pair(s) entered.");
+            System.out.print("Enter the word: ");
+            String word = s.nextLine();
+            System.out.println("Longest palindrome substring: " + getLongestPalindrome(word));
+            System.out.println("Longest mirrorable substring: " + getLongestMirrorWord(word));
+        }
+}
