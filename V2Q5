@@ -64,7 +64,7 @@ public class V2Q5i {
             }
         System.out.print("Enter number of ball to choose: "); //Nak berapa pilihan bola
         int numOfBall = input.nextInt();
-        System.out.print("Enter ball value: "); //Nak kira total prize nanti
+        System.out.print("Enter ball value: "); //Macam harga bola. Nak kira total prize nanti
         int ballValue = input.nextInt();
         System.out.print("Target number: "); //Nak teka nombor berapa
         int target = input.nextInt();
