@@ -1,0 +1,61 @@
+//Question 1
+
+package com.guild.market.MagicItem;
+
+public class MagicItem {
+    
+    //Instance variables
+    private String name; //Item name
+    private Double magicPrice; //Magical price(null indicates not set), D sebab wrapper class can store null
+    
+    //Static variables
+    private static final double MAGIC_TAX_RATE = 0.13; //Magical tax rate (13%)
+    private static int itemCount = 0; //Tracks the number of magical items created
+    
+    //No-argument constructor
+    public MagicItem(){
+       this.name = "Unnamed Magic Item";
+       this.magicPrice = null;
+       itemCount++; 
+    }
+    
+    //Parameterized constructor
+    public MagicItem(String name, Double magicPrice){
+        this.name = name;
+        this.magicPrice = magicPrice;
+        itemCount++;
+    }
+    
+    //Encapsulation method
+    public String getName(){
+        return name;
+    }
+    
+    public Double getMagicPrice(){
+        return magicPrice;
+    }
+    
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    public void setMagicPrice(Double magicPrice){
+        if(magicPrice<0){
+            throw new IllegalArgumentException("Price cannot be negative!");
+        }
+        else
+            this.magicPrice = magicPrice;
+    }
+    
+    //Class methods
+    //Returns the current number of magical items created
+    public static int getItemCount(){ 
+        return itemCount;
+    }
+    
+    //Calculates total price including magical tax
+    public static double calculateTotal(double magicPrice, int quantity){ 
+        return magicPrice*quantity*(1+MAGIC_TAX_RATE);
+    }
+    
+}
