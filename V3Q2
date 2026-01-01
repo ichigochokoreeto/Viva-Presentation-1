@@ -1,0 +1,57 @@
+//Question 2 (Sarah)
+
+package com.guild.market.MagicItemTest;
+
+import com.guild.market.MagicItem.MagicItem;
+
+public class MagicItemTest {
+    public static void main(String[] args){
+        
+        System.out.println("=== MagicItem Test Started ===\n");
+
+        // 1. Create objects using no-arg constructor
+        MagicItem item0 = new MagicItem();
+        System.out.println("Item 0 Name: " + item0.getName());
+        System.out.println("Item 0 Price: " + item0.getMagicPrice());
+
+        // 1. Create object using parameterized constructor
+        MagicItem item1 = new MagicItem("Potion", 60.0);
+        System.out.println("\nItem 1 Name: " + item1.getName());
+        System.out.println("Item 1 Price: " + item1.getMagicPrice());
+        
+        MagicItem item2 = new MagicItem("Enchanted Scroll", 50.0);
+        System.out.println("\nItem 2 Name: " + item2.getName());
+        System.out.println("Item 2 Price: " + item2.getMagicPrice());
+        
+        MagicItem item3 = new MagicItem("Flying Boot", 100.0);
+        System.out.println("\nItem 3 Name: " + item3.getName());
+        System.out.println("Item 3 Price: " + item3.getMagicPrice());
+        
+        
+        // 2. Call setMagicPrice() with valid price
+        System.out.println("\n=== Testing Valid Price ===");
+        item1.setMagicPrice(100.0);
+        System.out.println("Valid price set for Item 1: " + item1.getMagicPrice());
+        
+        
+        // 2. Call setMagicPrice() with invalid price
+        System.out.println("\n=== Testing Invalid Price ===");
+        try {
+            item1.setMagicPrice(-20.0);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Exception caught successfully: " + e.getMessage());
+        }
+
+        // 3. Call calculateTotal() for different quantities
+        double total1 = MagicItem.calculateTotal(60.0, 2);
+        double total2 = MagicItem.calculateTotal(50.0, 5);
+        double total3 = MagicItem.calculateTotal(100.0, 5);
+
+        System.out.println("\nTotal price item 1 with tax : " + total1);
+        System.out.println("Total price item 2 with tax : " + total2);
+        System.out.println("Total price item 3 with tax : " + total3);
+
+        // 4. Call getItemCount()
+        System.out.println("\nTotal Number of Magic Items : " + MagicItem.getItemCount());
+    }
+}
